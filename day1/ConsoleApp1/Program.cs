@@ -1,2 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿
+using ConsoleApp1.InputParse;
+
+var lines = LineBreakParser.ParseInput(Input.File);
+lines.ToList().ForEach(l => Console.WriteLine(l));

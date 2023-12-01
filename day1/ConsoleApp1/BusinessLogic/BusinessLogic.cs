@@ -31,18 +31,14 @@ namespace ConsoleApp1.BusinessLogic
             return s.Length == 1 ? SingleDigitToInt(s) : Digits.WordDigitToInt(s);
         }
 
-        private static int[] DigitsAsInts(string[] digits)
-        {
-            return digits.Select(d => DigitToInt(d)).ToArray();
-        }
 
         public static int FindRowDigits_v1(string s)
         {
             var first = FindDigits(s, RegexOptions.None).First();
             var last = FindDigits(s, RegexOptions.RightToLeft).First();
-            string[] both = { first, last };
-            var asInt  = DigitsAsInts(both);
-            return int.Parse($"{asInt.First()}{asInt.Last()}");
+            var firstAsInt  = DigitToInt(first);
+            var lastAsInt = DigitToInt(last);
+            return int.Parse($"{firstAsInt}{lastAsInt}");
         }
 
     }

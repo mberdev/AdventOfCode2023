@@ -16,7 +16,7 @@ static void Part1(string[] lines)
     //}
 
     var sum = lines
-        .Select(line => LineDataParser.ParseGame(line))
+        .Select(LineDataParser.ParseGame)
         .Sum(game =>
         {
             var isPossible = !BusinessLogic.GameBreaksLimits(game);
@@ -41,8 +41,8 @@ static void Part2(string[] lines)
     //}
 
     var sum = lines
-        .Select(line => LineDataParser.ParseGame(line))
-        .Sum(game => BusinessLogic.PowerOfRow(game));
+        .Select(LineDataParser.ParseGame)
+        .Sum(BusinessLogic.PowerOfRow);
 
     Console.WriteLine($"=============================");
 

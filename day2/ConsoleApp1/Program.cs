@@ -5,23 +5,53 @@ using System.Linq;
 
 var lines = LineBreakParser.ParseInput(Input.File);
 
-foreach (var line in lines)
+
+
+static void Part1(string[] lines)
 {
-    var parsed = LineDataParser.ParseLine(line);
-    Console.WriteLine($"{line} ->{parsed.GameIndex} : {string.Join(";", parsed.Rounds.Select(r => r.ToString()))}");
+    //foreach (var line in lines)
+    //{
+    //    var parsed = LineDataParser.ParseLine(line);
+    //    Console.WriteLine($"{line} ->{parsed.GameIndex} : {string.Join(";", parsed.Rounds.Select(r => r.ToString()))}");
+    //}
+
+    var sum = lines
+        .Select(line => LineDataParser.ParseGame(line))
+        .Sum(game =>
+        {
+            var isPossible = !BusinessLogic.GameBreaksLimits(game);
+            return isPossible ? game.GameIndex : 0;
+        });
+
+    Console.WriteLine($"=============================");
+
+    Console.WriteLine($"");
+    Console.WriteLine($"");
+    Console.WriteLine(sum);
+    Console.WriteLine($"");
+    Console.WriteLine($"");
 }
 
-var sum = lines
-    .Select(l => LineDataParser.ParseLine(l))
-    .Sum(l => {
-        var isPossible = !BusinessLogic.RowBreaksLogic(l);
-        return isPossible ? l.GameIndex : 0;
-    });
+static void Part2(string[] lines)
+{
+    //foreach (var line in lines)
+    //{
+    //    var parsed = LineDataParser.ParseLine(line);
+    //    Console.WriteLine($"{line} ->{parsed.GameIndex} : {string.Join(";", parsed.Rounds.Select(r => r.ToString()))}");
+    //}
 
-Console.WriteLine($"=============================");
+    var sum = lines
+        .Select(line => LineDataParser.ParseGame(line))
+        .Sum(game => BusinessLogic.PowerOfRow(game));
 
-Console.WriteLine($"");
-Console.WriteLine($"");
-Console.WriteLine(sum);
-Console.WriteLine($"");
-Console.WriteLine($"");
+    Console.WriteLine($"=============================");
+
+    Console.WriteLine($"");
+    Console.WriteLine($"");
+    Console.WriteLine(sum);
+    Console.WriteLine($"");
+    Console.WriteLine($"");
+}
+
+//Part1(lines);
+Part2(lines);

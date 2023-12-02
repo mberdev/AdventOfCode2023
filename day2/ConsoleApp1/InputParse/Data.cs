@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1.InputParse
 {
-
-
-
-
-    public class Row
+    public class Game
     {
         public int GameIndex { get; set; }
         public List<Round> Rounds { get; set; } = new List<Round>();

@@ -18,10 +18,22 @@ namespace ConsoleApp1.BusinessLogic
                 r.CountByColor[2] > Limits.MaxPerColor[2];
         }   
 
-        public static bool RowBreaksLogic(Row r)
+        public static bool GameBreaksLimits(Game r)
         {
             return r.Rounds.Any(RoundBreaksLogic);
         }
 
+        public static int PowerOfRow(Game r)
+        {
+            var highestRed = HighestOfColor(r, ColorEnum.red);
+            var highestGreen = HighestOfColor(r, ColorEnum.green);
+            var highestBlue = HighestOfColor(r, ColorEnum.blue);
+            return highestRed * highestGreen * highestBlue;
+        }
+
+        private static int HighestOfColor(Game r, ColorEnum color)
+        {
+            return r.Rounds.Select(x => x.CountByColor[(int) color]).Max();
+        }
     }
 }

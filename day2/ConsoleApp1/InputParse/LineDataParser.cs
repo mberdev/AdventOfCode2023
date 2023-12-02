@@ -9,9 +9,9 @@ namespace ConsoleApp1.InputParse
     public static class LineDataParser
     {
         // TODO: This function would habe been greatly improved with a regular expression
-        public static Row ParseLine(string s)
+        public static Game ParseGame(string s)
         {
-            Row row = new Row();
+            Game row = new Game();
 
             var parts = s.Split(':');
             row.GameIndex = int.Parse(parts[0].Substring("Game ".Length));

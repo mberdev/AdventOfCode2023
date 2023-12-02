@@ -8,6 +8,7 @@ namespace ConsoleApp1.InputParse
 {
     public static class LineDataParser
     {
+        // TODO: This function would habe been greatly improved with a regular expression
         public static Row ParseLine(string s)
         {
             Row row = new Row();
@@ -19,26 +20,36 @@ namespace ConsoleApp1.InputParse
 
             foreach (var roundStr in roundsStr)
             {
-                string[] colorValues = roundStr.Trim().Split(',');
+                Round round = ParseRound(roundStr);
 
-                var colorsData = colorValues.Select(c => {
-                    var parts = c.Trim().Split(' ');
-                    var colorCount = int.Parse(parts[0]);
-                    var color = ColorParser.ParseColor(parts[1]);
-                    return new { Color = color, ColorCount = colorCount };
-                });
-
-                var colors = new int[3];
-                foreach (ColorEnum c in Enumerable.Range(0, 3))
-                {
-                    var colorData = colorsData.FirstOrDefault(d => d.Color == c);
-                    colors[(int)c] = colorData?.ColorCount ?? 0;
-                }
-
-                row.Rounds.Add(new Round() { CountByColor = colors });
+                row.Rounds.Add(round);
             }
 
             return row;
+        }
+
+        private static Round ParseRound(string roundStr)
+        {
+            string[] colorValues = roundStr.Trim().Split(',');
+
+            var colorsData = colorValues.Select(c =>
+            {
+                string[] parts = c.Trim().Split(' ');
+                var colorCount = int.Parse(parts[0]);
+                var color = ColorParser.ParseColor(parts[1]);
+                var colorData =  new { Color = color, ColorCount = colorCount };
+                return colorData;
+            });
+
+            var colors = new int[3];
+            foreach (ColorEnum c in Enumerable.Range(0, 3))
+            {
+                var colorData = colorsData.FirstOrDefault(d => d.Color == c);
+                colors[(int)c] = colorData?.ColorCount ?? 0;
+            }
+
+            var round = new Round() { CountByColor = colors };
+            return round;
         }
     }
 }

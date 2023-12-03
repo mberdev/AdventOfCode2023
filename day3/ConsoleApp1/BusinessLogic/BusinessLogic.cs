@@ -11,29 +11,26 @@ namespace ConsoleApp1.BusinessLogic
 {
     public static class BusinessLogic
     {
-        public static bool RoundBreaksLogic(Round r)
+        public static bool IsAdjacentToSymbol(NumberToken token, HashSet<int> symbolsCurrentRow, HashSet<int> symbolsRowAbove, HashSet<int> symbolsRowBelow)
         {
-                return r.CountByColor[0] > Limits.MaxPerColor[0] ||
-                r.CountByColor[1] > Limits.MaxPerColor[1] ||
-                r.CountByColor[2] > Limits.MaxPerColor[2];
-        }   
+            var asString = token.Value.ToString();
 
-        public static bool GameBreaksLimits(Game r)
-        {
-            return r.Rounds.Any(RoundBreaksLogic);
-        }
+            // Current line
+            var positionBefore = token.Index - 1;
+            var positionAfter = token.Index + asString.Length;
+            var isAdj = symbolsCurrentRow.Contains(positionBefore) || symbolsCurrentRow.Contains(positionAfter);
+            if (isAdj) return true;
 
-        public static int PowerOfRow(Game r)
-        {
-            var highestRed = HighestOfColor(r, ColorEnum.red);
-            var highestGreen = HighestOfColor(r, ColorEnum.green);
-            var highestBlue = HighestOfColor(r, ColorEnum.blue);
-            return highestRed * highestGreen * highestBlue;
-        }
+            // Line above
+            var range = Enumerable.Range(positionBefore, asString.Length + 2); // +2 for diagonals
+            isAdj = range.Any(position => symbolsRowAbove.Contains(position));
+            if (isAdj) return true;
 
-        private static int HighestOfColor(Game r, ColorEnum color)
-        {
-            return r.Rounds.Select(x => x.CountByColor[(int) color]).Max();
+            // Line below
+            isAdj = range.Any(position => symbolsRowBelow.Contains(position));
+            if (isAdj) return true;
+
+            return false;
         }
     }
 }

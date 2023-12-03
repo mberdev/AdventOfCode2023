@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace ConsoleApp1.InputParse
 {
-    public class Game
+    public class NumberToken
     {
-        public int GameIndex { get; set; }
-        public List<Round> Rounds { get; set; } = new List<Round>();
+        public int Index { get; set; }
+        public int Value { get; set; }
 
-    }
-
-    public class Round
-    {
-        public int[] CountByColor { get; set; } = new int[3];
+        public NumberToken(int index, int value)
+        {
+            Index = index;
+            Value = value;
+        }
 
         public override string ToString()
         {
-            return string.Join(",", CountByColor);
+            return $"({Index}, {Value})";
         }
     }
 }

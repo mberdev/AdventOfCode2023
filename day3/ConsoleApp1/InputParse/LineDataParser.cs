@@ -9,29 +9,21 @@ namespace ConsoleApp1.InputParse
 {
     public static class LineDataParser
     {
-        public static (List<NumberToken> numbers, HashSet<int> symbols) ParseTokens(string input)
+        public static List<Token> ParseTokens(int row, string input)
         {
-            var numbers = new List<NumberToken>();
-            var symbols = new HashSet<int>();
+            // Note: The two regex below could have been combined.
 
             // Parsing integers
-            MatchCollection intMatches = Regex.Matches(input, @"\d+");
-            foreach (Match match in intMatches)
-            {
-                int value = int.Parse(match.Value);
-                int index = match.Index;
-                numbers.Add(new NumberToken(index, value));
-            }
+            var numbers = Regex.Matches(input, @"\d+");
+            var tokens = numbers.Select(m => new Token(row, m.Index, m.Value)).ToList();
 
             // Parsing one-character symbols
-            string symbolsPattern = @"[^.\s\d]";
-            MatchCollection symbolMatches = Regex.Matches(input, symbolsPattern);
-            foreach (Match match in symbolMatches)
-            {
-                symbols.Add(match.Index);
-            }
+            var symbols = Regex.Matches(input, @"[^.\s\d]");
+            tokens.AddRange(
+                symbols.Select(m => new Token(row, m.Index, m.Value))
+            );
 
-            return (numbers, symbols);
+            return tokens;
         }
         
     }

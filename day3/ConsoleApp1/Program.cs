@@ -2,42 +2,30 @@
 using ConsoleApp1.BusinessLogic;
 using ConsoleApp1.InputParse;
 using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var lines = LineBreakParser.ParseInput(Input.File);
 
-
-
-static void Part1(string[] lines)
+static void Part2(string[] lines)
 {
-    //foreach (var line in lines)
-    //{
-    //    var parsed = LineDataParser.ParseTokens(line);
-    //    var numbers = string.Join(";", parsed.numbers.Select(n => $"({n.Index},{n.Value})"));
-    //    Console.WriteLine($"{line} ->{string.Join(";", parsed.symbols)} | {numbers})");
-    //}
-    var sum = 0;
 
-    var symbolsRowAbove = new HashSet<int>();
-    var (numbersCurrentRow, symbolsCurrentRow) = LineDataParser.ParseTokens(lines[0]);
-
-    var iLine = 0;
+    var map = new TokensMap();
+    int row = 0;
     foreach (var line in lines)
     {
-        var (numbersRowBelow, symbolsRowBelow) = iLine+1 < lines.Length ? LineDataParser.ParseTokens(lines[iLine+1]) : (new List<NumberToken>(), new HashSet<int>());
+        map.Tokens.AddRange(LineDataParser.ParseTokens(row, line));
+        row++;
+    }
 
-        var adjacentNumbers = numbersCurrentRow.Where(number => BusinessLogic.IsAdjacentToSymbol(number, symbolsCurrentRow, symbolsRowAbove, symbolsRowBelow));
-        
-        Console.WriteLine($"{string.Join(";", adjacentNumbers.Select(n => n.Value))}");
+    var sum = 0;
 
-        sum += adjacentNumbers.Sum(n => n.Value);
-
-        // Shift everythig upwards
-        symbolsRowAbove = symbolsCurrentRow;
-
-        numbersCurrentRow = numbersRowBelow;
-        symbolsCurrentRow = symbolsRowBelow;
-
-        iLine++;
+    foreach (var symbol in map.Tokens.Where(t => t.IsSymbol))
+    {
+        var adjacentNumbers = BusinessLogic.NumbersAdjacentToSymbol(map, symbol);
+        if (adjacentNumbers.Count == 2)
+        {
+            sum += adjacentNumbers[0].AsNumber * adjacentNumbers[1].AsNumber;
+        }
     }
 
     Console.WriteLine($"=============================");
@@ -49,26 +37,5 @@ static void Part1(string[] lines)
     Console.WriteLine($"");
 }
 
-static void Part2(string[] lines)
-{
-    //foreach (var line in lines)
-    //{
-    //    var parsed = LineDataParser.ParseLine(line);
-    //    Console.WriteLine($"{line} ->{parsed.GameIndex} : {string.Join(";", parsed.Rounds.Select(r => r.ToString()))}");
-    //}
-
-    //var sum = lines
-    //    .Select(LineDataParser.ParseGame)
-    //    .Sum(BusinessLogic.PowerOfRow);
-
-    //Console.WriteLine($"=============================");
-
-    //Console.WriteLine($"");
-    //Console.WriteLine($"");
-    //Console.WriteLine(sum);
-    //Console.WriteLine($"");
-    //Console.WriteLine($"");
-}
-
-Part1(lines);
-//Part2(lines);
+//Part1(lines);
+Part2(lines);

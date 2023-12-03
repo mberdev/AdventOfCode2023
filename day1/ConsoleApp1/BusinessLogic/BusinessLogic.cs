@@ -27,19 +27,15 @@ namespace ConsoleApp1.BusinessLogic
             return matches.ToArray().Select(m => m.Value).ToArray();
         }
 
-
         private static int SingleDigitToInt(string s)
         {
             return int.Parse($"{s}");
         }
 
-
-
         private static int DigitToInt(string s)
         {
             return s.Length == 1 ? SingleDigitToInt(s) : Digits.WordDigitToInt(s);
         }
-
 
         public static int FindRowDigits_v1(string s)
         {

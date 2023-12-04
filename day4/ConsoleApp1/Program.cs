@@ -2,40 +2,29 @@
 using ConsoleApp1.BusinessLogic;
 using ConsoleApp1.InputParse;
 using System.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var lines = LineBreakParser.ParseInput(Input.File);
 
-static void Part2(string[] lines)
+static void Part1(string[] lines)
 {
+    var cards = lines.Select(LineDataParser.ParseCard).ToList();
 
-    var map = new TokensMap();
-    int row = 0;
-    foreach (var line in lines)
+    foreach (var card in cards)
     {
-        map.Tokens.AddRange(LineDataParser.ParseTokens(row, line));
-        row++;
+        Console.WriteLine($"Card {card.CardNumber}");
+        Console.WriteLine($"Winning Numbers: {string.Join(", ", card.WinningNumbers)}");
+        Console.WriteLine($"My Numbers: {string.Join(", ", card.MyNumbers)}");
+        Console.WriteLine($"");
     }
 
-    var sum = 0;
+    //Console.WriteLine($"=============================");
 
-    foreach (var symbol in map.Tokens.Where(t => t.IsSymbol))
-    {
-        var adjacentNumbers = BusinessLogic.NumbersAdjacentToSymbol(map, symbol);
-        if (adjacentNumbers.Count == 2)
-        {
-            sum += adjacentNumbers[0].AsNumber * adjacentNumbers[1].AsNumber;
-        }
-    }
-
-    Console.WriteLine($"=============================");
-
-    Console.WriteLine($"");
-    Console.WriteLine($"");
-    Console.WriteLine(sum);
-    Console.WriteLine($"");
-    Console.WriteLine($"");
+    //Console.WriteLine($"");
+    //Console.WriteLine($"");
+    //Console.WriteLine(sum);
+    //Console.WriteLine($"");
+    //Console.WriteLine($"");
 }
 
-//Part1(lines);
-Part2(lines);
+Part1(lines);
+//Part2(lines);

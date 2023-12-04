@@ -9,21 +9,29 @@ namespace ConsoleApp1.InputParse
 {
     public static class LineDataParser
     {
-        public static List<Token> ParseTokens(int row, string input)
+        //                                         g1          g2       g3           g4       g5
+        private static string pattern = @"^Card\s*(\d+)\s*:\s*(\d+\s+)*(\d+\s*)\|\s*(\d+\s+)*(\d+)$";
+
+        private static Regex regex = new Regex(pattern, RegexOptions.Compiled);
+
+        public static Card ParseCard(string input)
         {
-            // Note: The two regex below could have been combined.
+            var parsed = regex.Matches(input).First();
+            var rowNumber = int.Parse(parsed.Groups[1].Captures.First().Value);
 
-            // Parsing integers
-            var numbers = Regex.Matches(input, @"\d+");
-            var tokens = numbers.Select(m => new Token(row, m.Index, m.Value)).ToList();
+            // there are always 10 "winning Numbers numbers" 
+            var winningNumbers = parsed.Groups[2].Captures.Select(c => int.Parse(c.Value)).ToList();
+            winningNumbers.AddRange(parsed.Groups[3].Captures.Select(c => int.Parse(c.Value)));
 
-            // Parsing one-character symbols
-            var symbols = Regex.Matches(input, @"[^.\s\d]");
-            tokens.AddRange(
-                symbols.Select(m => new Token(row, m.Index, m.Value))
+            // the rest is always "my numbers"
+            var myNumbers = parsed.Groups[4].Captures.Select(c => int.Parse(c.Value)).ToList();
+            myNumbers.AddRange(parsed.Groups[5].Captures.Select(c => int.Parse(c.Value)));
+
+            return new Card(
+                rowNumber, 
+                winningNumbers.ToList(), 
+                myNumbers.ToList()
             );
-
-            return tokens;
         }
         
     }

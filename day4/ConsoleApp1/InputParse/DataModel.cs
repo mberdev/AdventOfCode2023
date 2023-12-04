@@ -14,5 +14,10 @@ namespace ConsoleApp1.InputParse
             MyNumbers = myNumbers;
         }
 
+        public Card Copy()
+        {
+            return new Card(CardNumber, WinningNumbers, MyNumbers);
+        }
+
     }
 }

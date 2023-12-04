@@ -24,5 +24,18 @@ namespace ConsoleApp1.BusinessLogic
 
             return (int)Math.Pow(2, wins.Count -1);
         }
+
+        public static List<Card> SpawnCopies(Dictionary<int, Card> allOriginalCards, Card cardThatSpawnsCopies)
+        {
+            var wins = FindWins(cardThatSpawnsCopies.MyNumbers, cardThatSpawnsCopies.WinningNumbers);
+
+
+            return Enumerable
+                .Range(cardThatSpawnsCopies.CardNumber + 1, wins.Count) // N cards to copy, below the card being processed
+                .Select(n => allOriginalCards[n])
+                .Select(c => c.Copy())
+                .ToList();
+
+        }
     }
 }

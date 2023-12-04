@@ -12,6 +12,17 @@ namespace ConsoleApp1.BusinessLogic
 {
     public static class BusinessLogic
     {
+        public static List<int> FindWins(List<int> myNumbers, List<int> winningNumbers)
+        {
+            return myNumbers.Intersect(winningNumbers).ToList();
+        }
 
+        public static int CountPoints(List<int> wins)
+        {
+            if (wins.Count == 0)
+                return 0;
+
+            return (int)Math.Pow(2, wins.Count -1);
+        }
     }
 }

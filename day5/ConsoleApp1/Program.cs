@@ -3,8 +3,8 @@ using ConsoleApp1.BusinessLogic;
 using ConsoleApp1.InputParse;
 using System.Linq;
 
-//var lines = LineBreakParser.ParseInput(Input.File, leaveEmptyLines: true);
-var lines = LineBreakParser.ParseInput(Input.TestSet, leaveEmptyLines: true);
+var lines = LineBreakParser.ParseInput(Input.File, leaveEmptyLines: true);
+//var lines = LineBreakParser.ParseInput(Input.TestSet, leaveEmptyLines: true);
 
 // Optional. For control.
 static void PrintAlmanach(Almanach almanach)

@@ -9,86 +9,50 @@ namespace ConsoleApp1.InputParse
 {
     public class DataParser
     {
-        private class StateMachine
-        {
-            static string[] sections = { "seed", "soil", "fertilizer", "water", "light", "temperature", "humidity", "location" };
-
-            public string CurrentSection { get; private set; } = "seed";
-            public bool IsHeader { get; private set; } = true;
-
-            public string NextSection()
-            {
-                var nextSection = sections.SkipWhile(s => s != CurrentSection).Skip(1).FirstOrDefault();
-
-                // It was already the last section
-                if (nextSection == null)
-                    return CurrentSection;
-
-                CurrentSection = nextSection;
-                IsHeader = true;
-                return CurrentSection;
-            }
-
-            public void NextState(string line)
-            {
-                if (IsHeader)
-                {
-                    IsHeader = false;
-                } else if (string.IsNullOrWhiteSpace(line)) {
-                    NextSection();
-                }
-            }
-        }
-
-
 
         public static Almanach Parse(List<string> input)
         {
-
-            var state = new StateMachine();
-
             var almanach = new Almanach();
 
-            foreach (var line in input)
+            var linesGroups = StringSeparator.Separate(input);
+
+            var seedsGroup = linesGroups[0];
+            almanach.Seeds.AddRange(ParseSeedsList(seedsGroup.First()));
+
+            var otherGroups = linesGroups.Skip(1).ToList();
+            foreach (var group in otherGroups)
             {
-                ParseLine(state, almanach, line);
+                var header = group.First();
+
+                var (sourceName, destinationName) = ParseMapHeader(header);
+                var map = new Map(sourceName, destinationName);
+                almanach.Maps.Add(map.Key, map);
+
+                var otherLines = group.Skip(1).ToList();
+                foreach (var line in otherLines)
+                {
+                    map.Ranges.Add(ParseRange(line));
+                }
             }
 
             return almanach;
         }
 
-        private static IEnumerable<long> ParseSeedsHeader(string line)
+        private static IEnumerable<long> ParseSeedsList(string line)
         {
             var parts = line.Split(' ');
             return parts.Skip(1).Select(long.Parse);
         }
 
-        private static void ParseLine(StateMachine state, Almanach almanach, string line)
+        // "light-to-temperature map:" -> [ "light", "temperature"]
+        private static (string sourceName, string destinationName) ParseMapHeader(string line)
         {
-            if (state.IsHeader)
-            {
-                if (state.CurrentSection == "seed")
-                {
-                    almanach.Seeds.AddRange(ParseSeedsHeader(line));
-
-                }
-                else
-                {
-                    almanach.Maps.Add(state.CurrentSection, new Map(state.CurrentSection));
-                }
-            }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(line) && state.CurrentSection != "seed")
-                {
-                    var map = almanach.Maps[state.CurrentSection];
-                    map.Ranges.Add(ParseRange(line));
-                }
-            }
-
-            state.NextState(line);
+            var parts = line.Trim().Split(' ');
+            var sections = parts[0].Split('-');
+            return (sections[0], sections[2]);
         }
 
+        // "45 77 23" -> { Start: 77, End: 45, Length: 23}
         private static Range ParseRange(string line)
         {
             var values = line.Split(' ').Select(long.Parse).ToArray();

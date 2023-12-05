@@ -10,12 +10,16 @@ namespace ConsoleApp1.InputParse
 
     public class Map
     {
-        public string Name { get; }
+        public string Key => $"{SourceName}-{DestinationName}";
+
+        public string SourceName { get; }
+        public string DestinationName { get; }
         public List<Range> Ranges { get; } = new();
 
-        public Map(string name)
+        public Map(string sourceName, string destinationName)
         {
-            Name = name;
+            SourceName = sourceName;
+            DestinationName = destinationName;
         }
     }
 

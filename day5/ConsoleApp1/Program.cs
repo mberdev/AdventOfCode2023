@@ -111,7 +111,8 @@ static void Part1(string[] lines)
     //Console.WriteLine($"");
 }
     
-static void Part2(string[] lines)
+// This brute-force method works only on the small sample set
+static void Part2_BruteForce(string[] lines)
 {
     var almanach = DataParser.Parse_Part2(lines.ToList());
     PrintAlmanach_Part2(almanach);
@@ -172,4 +173,4 @@ static void Part2(string[] lines)
 var lines = LineBreakParser.ParseInput(Input.TestSet, leaveEmptyLines: true);
 
 //Part1(lines);
-Part2(lines);
+Part2_BruteForce(lines);

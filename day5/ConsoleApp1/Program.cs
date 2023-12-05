@@ -6,6 +6,7 @@ using System.Linq;
 //var lines = LineBreakParser.ParseInput(Input.File, leaveEmptyLines: true);
 var lines = LineBreakParser.ParseInput(Input.TestSet, leaveEmptyLines: true);
 
+// Optional. For control.
 static void PrintAlmanach(Almanach almanach)
 {
     Console.WriteLine($"=============================");
@@ -44,13 +45,20 @@ static void Part1(string[] lines)
 
     while (conversion.DestinationName != finalDestination)
     {
-        values = Convert(values, conversion);
+        var converted = values.Select(v => BusinessLogic.ConvertValue(v, conversion)).ToList();
+
+        //Optional
+        PrintConversion(values, conversion, converted);
 
         source = conversion.DestinationName;
         conversion = FindNextConversion(almanach, source);
+        values = converted;
     }
 
-    values = Convert(values, conversion);
+    var convertedFinal = values.Select(v => BusinessLogic.ConvertValue(v, conversion)).ToList();
+
+    //Optional
+    PrintConversion(values, conversion, convertedFinal);
 
 
 
@@ -74,10 +82,10 @@ static void Part2(string[] lines)
 
 Part1(lines);
 
-static List<long> Convert(List<long> values, Map map)
-{
-    var converted = values.Select(v => BusinessLogic.ConvertValue(v, map)).ToArray();
 
+//Optional. For control.
+static void PrintConversion(List<long> values, Map map, List<long> converted)
+{
     Console.WriteLine($"Searching {map.SourceName} to {map.DestinationName}");
 
     // iterate on both values and converted at the same time. For each pair of value, write a string to console
@@ -90,8 +98,5 @@ static List<long> Convert(List<long> values, Map map)
     Console.WriteLine($"{converted.Min()}");
 
     Console.WriteLine($"=============================");
-
-    return converted.ToList();
-
 }
 //Part2(lines);

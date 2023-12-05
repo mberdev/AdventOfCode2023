@@ -3,7 +3,7 @@ namespace ConsoleApp1.InputParse
 {
     public class Almanach
     {
-        public List<int> Seeds { get; } = new();
+        public List<long> Seeds { get; } = new();
         public Dictionary<string, Map> Maps { get; } = new();
 
     }
@@ -21,11 +21,11 @@ namespace ConsoleApp1.InputParse
 
     public class Range
     {
-        public int DestinationStart { get; }
-        public int SourceStart { get; }
-        public int RangeLength { get; }
+        public long DestinationStart { get; }
+        public long SourceStart { get; }
+        public long RangeLength { get; }
 
-        public Range(int destinationStart, int sourceStart, int rangeLength)
+        public Range(long destinationStart, long sourceStart, long rangeLength)
         {
             DestinationStart = destinationStart;
             SourceStart = sourceStart;

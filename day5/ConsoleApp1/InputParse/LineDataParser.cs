@@ -57,10 +57,10 @@ namespace ConsoleApp1.InputParse
             return almanach;
         }
 
-        private static IEnumerable<int> ParseSeedsHeader(string line)
+        private static IEnumerable<long> ParseSeedsHeader(string line)
         {
             var parts = line.Split(' ');
-            return parts.Skip(1).Select(int.Parse);
+            return parts.Skip(1).Select(long.Parse);
         }
 
         private static void ParseLine(StateMachine state, Almanach almanach, string line)
@@ -91,7 +91,7 @@ namespace ConsoleApp1.InputParse
 
         private static Range ParseRange(string line)
         {
-            var values = line.Split(' ').Select(int.Parse).ToArray();
+            var values = line.Split(' ').Select(long.Parse).ToArray();
             return new Range(values[0], values[1], values[2]);
         }
 

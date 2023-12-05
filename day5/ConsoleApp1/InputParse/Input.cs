@@ -8,9 +8,7 @@ namespace ConsoleApp1.InputParse
 {
     public static class Input
     {
-        public static string TestSet = @"
-
-seeds: 79 14 55 13
+        public static string TestSet = @"seeds: 79 14 55 13
 
 seed-to-soil map:
 50 98 2
@@ -43,7 +41,6 @@ temperature-to-humidity map:
 humidity-to-location map:
 60 56 37
 56 93 4
-
 ";
 
 

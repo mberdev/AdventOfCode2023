@@ -79,7 +79,7 @@ namespace ConsoleApp1.InputParse
             }
             else
             {
-                if (!string.IsNullOrWhiteSpace(line))
+                if (!string.IsNullOrWhiteSpace(line) && state.CurrentSection != "seed")
                 {
                     var map = almanach.Maps[state.CurrentSection];
                     map.Ranges.Add(ParseRange(line));

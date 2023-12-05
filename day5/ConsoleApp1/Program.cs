@@ -3,8 +3,7 @@ using ConsoleApp1.BusinessLogic;
 using ConsoleApp1.InputParse;
 using System.Linq;
 
-var lines = LineBreakParser.ParseInput(Input.File, leaveEmptyLines: true);
-//var lines = LineBreakParser.ParseInput(Input.TestSet, leaveEmptyLines: true);
+
 
 // Optional. For control.
 static void PrintAlmanach(Almanach almanach)
@@ -27,6 +26,25 @@ static Map FindNextConversion(Almanach almanach, string source)
 {
     return almanach.Maps.Values.First(m => m.SourceName == source);
 }
+
+//Optional. For control.
+static void PrintConversion(List<long> values, Map map, List<long> converted)
+{
+    Console.WriteLine($"Searching {map.SourceName} to {map.DestinationName}");
+
+    // iterate on both values and converted at the same time. For each pair of value, write a string to console
+    for (int i = 0; i < values.Count; i++)
+    {
+        Console.WriteLine($"{values[i]} -> {converted[i]}");
+    }
+
+    Console.WriteLine($"=============================");
+    Console.WriteLine($"{converted.Min()}");
+
+    Console.WriteLine($"=============================");
+}
+
+
 
 static void Part1(string[] lines)
 {
@@ -60,11 +78,6 @@ static void Part1(string[] lines)
     //Optional
     PrintConversion(values, conversion, convertedFinal);
 
-
-
-
-
-
     //Console.WriteLine($"=============================");
 
     //Console.WriteLine($"");
@@ -80,23 +93,11 @@ static void Part2(string[] lines)
 
 }
 
+
+//-------------------------------------------------------------
+
+var lines = LineBreakParser.ParseInput(Input.File, leaveEmptyLines: true);
+//var lines = LineBreakParser.ParseInput(Input.TestSet, leaveEmptyLines: true);
+
 Part1(lines);
-
-
-//Optional. For control.
-static void PrintConversion(List<long> values, Map map, List<long> converted)
-{
-    Console.WriteLine($"Searching {map.SourceName} to {map.DestinationName}");
-
-    // iterate on both values and converted at the same time. For each pair of value, write a string to console
-    for (int i = 0; i < values.Count; i++)
-    {
-        Console.WriteLine($"{values[i]} -> {converted[i]}");
-    }
-
-    Console.WriteLine($"=============================");
-    Console.WriteLine($"{converted.Min()}");
-
-    Console.WriteLine($"=============================");
-}
 //Part2(lines);

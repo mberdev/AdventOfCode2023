@@ -10,14 +10,14 @@ namespace ConsoleApp1.InputParse
     public class DataParser
     {
 
-        public static Almanach Parse(List<string> input)
+        public static Almanach_Part1 Parse_Part1(List<string> input)
         {
-            var almanach = new Almanach();
+            var almanach = new Almanach_Part1();
 
             var linesGroups = StringSeparator.Separate(input);
 
             var seedsGroup = linesGroups[0];
-            almanach.Seeds.AddRange(ParseSeedsList(seedsGroup.First()));
+            almanach.Seeds.AddRange(ParseSeedsList_Part1(seedsGroup.First()));
 
             var otherGroups = linesGroups.Skip(1).ToList();
             foreach (var group in otherGroups)
@@ -26,7 +26,7 @@ namespace ConsoleApp1.InputParse
 
                 var (sourceName, destinationName) = ParseMapHeader(header);
                 var map = new Map(sourceName, destinationName);
-                almanach.Maps.Add(map.Key, map);
+                almanach.Maps[(int)map.Source] = map;
 
                 var otherLines = group.Skip(1).ToList();
                 foreach (var line in otherLines)
@@ -38,18 +38,63 @@ namespace ConsoleApp1.InputParse
             return almanach;
         }
 
-        private static IEnumerable<long> ParseSeedsList(string line)
+
+        public static Almanach_Part2 Parse_Part2(List<string> input)
+        {
+            var almanach = new Almanach_Part2();
+
+            var linesGroups = StringSeparator.Separate(input);
+
+            var seedsGroup = linesGroups[0];
+            almanach.SeedRanges.AddRange(ParseSeedsList_Part2(seedsGroup.First()));
+
+            var otherGroups = linesGroups.Skip(1).ToList();
+            foreach (var group in otherGroups)
+            {
+                var header = group.First();
+
+                var (source, destination) = ParseMapHeader(header);
+                var map = new Map(source, destination);
+                almanach.Maps[(int)map.Source] = map;
+
+                var otherLines = group.Skip(1).ToList();
+                foreach (var line in otherLines)
+                {
+                    map.Ranges.Add(ParseRange(line));
+                }
+            }
+
+            return almanach;
+        }
+
+        private static IEnumerable<long> ParseSeedsList_Part1(string line)
         {
             var parts = line.Split(' ');
             return parts.Skip(1).Select(long.Parse);
         }
 
+        private static List<SeedRange> ParseSeedsList_Part2(string line)
+        {
+            var parts = line.Split(' ');
+            var values = parts.Skip(1).Select(long.Parse).ToArray();
+
+            if (values.Length % 2 != 0)
+            {
+                throw new Exception("Should be an even number of values");
+            }
+
+            // Classic way of iterating on pairs of values
+            return Enumerable.Range(0, values.Length / 2)
+                .Select(i => new SeedRange(values[i * 2], values[i*2+1]))
+                .ToList();
+        }
+
         // "light-to-temperature map:" -> [ "light", "temperature"]
-        private static (string sourceName, string destinationName) ParseMapHeader(string line)
+        private static (Sections source, Sections destination) ParseMapHeader(string line)
         {
             var parts = line.Trim().Split(' ');
             var sections = parts[0].Split('-');
-            return (sections[0], sections[2]);
+            return (Enum.Parse<Sections>(sections[0]), Enum.Parse<Sections>(sections[2]));
         }
 
         // "45 77 23" -> { Start: 77, End: 45, Length: 23}

@@ -1,25 +1,63 @@
 ﻿
 namespace ConsoleApp1.InputParse
 {
-    public class Almanach
+    public interface IConversionsStore
+    {
+        public Map[] Maps { get; }
+
+    }
+    public class Almanach_Part1 : IConversionsStore
     {
         public List<long> Seeds { get; } = new();
-        public Dictionary<string, Map> Maps { get; } = new();
+        public Map[] Maps { get; } = new Map[Enum.GetValues(typeof(Sections)).Length];
 
+    }
+
+    public class Almanach_Part2 : IConversionsStore
+    {
+        public List<SeedRange> SeedRanges { get; } = new();
+        public Map[] Maps { get; } = new Map[Enum.GetValues(typeof(Sections)).Length];
+
+    }
+
+    public class SeedRange
+    {
+        public long Start { get; }
+        public long Length { get; }
+
+        public long End => Start + Length - 1;
+
+        public SeedRange(long start, long length)
+        {
+            Start = start;
+            Length = length;
+        }
+    }
+
+    public enum Sections
+    {
+        seed = 0,
+        soil = 1,
+        fertilizer = 2,
+        water = 3,
+        light = 4,
+        temperature = 5,
+        humidity = 6,
+        location = 7,
     }
 
     public class Map
     {
-        public string Key => $"{SourceName}-{DestinationName}";
+        //public string Key => $"{SourceName}-{DestinationName}";
 
-        public string SourceName { get; }
-        public string DestinationName { get; }
+        public Sections Source { get; }
+        public Sections Destination { get; }
         public List<Range> Ranges { get; } = new();
 
-        public Map(string sourceName, string destinationName)
+        public Map(Sections source, Sections destination)
         {
-            SourceName = sourceName;
-            DestinationName = destinationName;
+            Source = source;
+            Destination = destination;
         }
     }
 

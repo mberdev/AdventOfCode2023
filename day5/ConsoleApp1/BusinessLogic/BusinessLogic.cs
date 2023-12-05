@@ -24,7 +24,7 @@ namespace ConsoleApp1.BusinessLogic
             }
 
             // Explicit range. The destination is defined by the range
-            var offset = valueToConvert - range.SourceStart;
+            var offset = valueToConvert - range!.SourceStart;
             return range.DestinationStart + offset;
         }
 

@@ -7,32 +7,95 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1.InputParse
 {
-    public static class LineDataParser
+    public class DataParser
     {
-        //                                         g1          g2       g3           g4       g5
-        private static string pattern = @"^Card\s*(\d+)\s*:\s*(\d+\s+)*(\d+\s*)\|\s*(\d+\s+)*(\d+)$";
-
-        private static Regex regex = new Regex(pattern, RegexOptions.Compiled);
-
-        public static Card ParseCard(string input)
+        private class StateMachine
         {
-            var parsed = regex.Matches(input).First();
-            var rowNumber = int.Parse(parsed.Groups[1].Captures.First().Value);
+            static string[] sections = { "seed", "soil", "fertilizer", "water", "light", "temperature", "humidity", "location" };
 
-            // there are always 10 "winning Numbers numbers" 
-            var winningNumbers = parsed.Groups[2].Captures.Select(c => int.Parse(c.Value)).ToList();
-            winningNumbers.AddRange(parsed.Groups[3].Captures.Select(c => int.Parse(c.Value)));
+            public string CurrentSection { get; private set; } = "seed";
+            public bool IsHeader { get; private set; } = true;
 
-            // the rest is always "my numbers"
-            var myNumbers = parsed.Groups[4].Captures.Select(c => int.Parse(c.Value)).ToList();
-            myNumbers.AddRange(parsed.Groups[5].Captures.Select(c => int.Parse(c.Value)));
+            public string NextSection()
+            {
+                var nextSection = sections.SkipWhile(s => s != CurrentSection).Skip(1).FirstOrDefault();
 
-            return new Card(
-                rowNumber, 
-                winningNumbers.ToList(), 
-                myNumbers.ToList()
-            );
+                // It was already the last section
+                if (nextSection == null)
+                    return CurrentSection;
+
+                CurrentSection = nextSection;
+                IsHeader = true;
+                return CurrentSection;
+            }
+
+            public void NextState(string line)
+            {
+                if (IsHeader)
+                {
+                    IsHeader = false;
+                } else if (string.IsNullOrWhiteSpace(line)) {
+                    NextSection();
+                }
+            }
         }
-        
+
+
+
+        public static Almanach Parse(List<string> input)
+        {
+
+            var state = new StateMachine();
+
+            var almanach = new Almanach();
+
+            foreach (var line in input)
+            {
+                ParseLine(state, almanach, line);
+            }
+
+            return almanach;
+        }
+
+        private static IEnumerable<int> ParseSeedsHeader(string line)
+        {
+            var parts = line.Split(' ');
+            return parts.Skip(1).Select(int.Parse);
+        }
+
+        private static void ParseLine(StateMachine state, Almanach almanach, string line)
+        {
+            if (state.IsHeader)
+            {
+                if (state.CurrentSection == "seed")
+                {
+                    almanach.Seeds.AddRange(ParseSeedsHeader(line));
+
+                }
+                else
+                {
+                    almanach.Maps.Add(state.CurrentSection, new Map(state.CurrentSection));
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(line))
+                {
+                    var map = almanach.Maps[state.CurrentSection];
+                    map.Ranges.Add(ParseRange(line));
+                }
+            }
+
+            state.NextState(line);
+        }
+
+        private static Range ParseRange(string line)
+        {
+            var values = line.Split(' ').Select(int.Parse).ToArray();
+            return new Range(values[0], values[1], values[2]);
+        }
+
+
+
     }
 }

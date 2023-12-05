@@ -1,23 +1,35 @@
 ﻿
 namespace ConsoleApp1.InputParse
 {
-    public class Card
+    public class Almanach
     {
-        public int CardNumber { get; }
-        public List<int> WinningNumbers { get; }
-        public List<int> MyNumbers { get; }
+        public List<int> Seeds { get; } = new();
+        public Dictionary<string, Map> Maps { get; } = new();
 
-        public Card(int cardNumber, List<int> winningNumbers, List<int> myNumbers)
+    }
+
+    public class Map
+    {
+        public string Name { get; }
+        public List<Range> Ranges { get; } = new();
+
+        public Map(string name)
         {
-            CardNumber = cardNumber;
-            WinningNumbers = winningNumbers;
-            MyNumbers = myNumbers;
+            Name = name;
         }
+    }
 
-        public Card Copy()
+    public class Range
+    {
+        public int DestinationStart { get; }
+        public int SourceStart { get; }
+        public int RangeLength { get; }
+
+        public Range(int destinationStart, int sourceStart, int rangeLength)
         {
-            return new Card(CardNumber, WinningNumbers, MyNumbers);
+            DestinationStart = destinationStart;
+            SourceStart = sourceStart;
+            RangeLength = rangeLength;
         }
-
     }
 }

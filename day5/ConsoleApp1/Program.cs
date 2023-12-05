@@ -35,6 +35,9 @@ static void PrintAlmanach_Part2(Almanach_Part2 almanach)
 
     foreach (var map in almanach.Maps)
     {
+        if (map == null)
+            continue;
+
         Console.WriteLine($"Map: {map.Source} -> {map.Destination}");
         foreach (var range in map.Ranges)
         {
@@ -145,10 +148,10 @@ static void Part2(string[] lines)
             seed++;
         }
 
-        Console.WriteLine($"min {min}");
 
     }
 
+    Console.WriteLine($"min {min}");
 
 
 
@@ -168,5 +171,5 @@ static void Part2(string[] lines)
 //var lines = LineBreakParser.ParseInput(Input.File, leaveEmptyLines: true);
 var lines = LineBreakParser.ParseInput(Input.TestSet, leaveEmptyLines: true);
 
-Part1(lines);
-//Part2(lines);
+//Part1(lines);
+Part2(lines);

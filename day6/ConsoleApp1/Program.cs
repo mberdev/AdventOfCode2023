@@ -132,6 +132,8 @@ static void Part2(string[] lines)
 
     if (minimalHoldingTime == null || maximalHoldingTime == null)
         throw new Exception("No holding time found");
+    
+
 
     var successCount = maximalHoldingTime - minimalHoldingTime + 1;
 

@@ -21,7 +21,11 @@ namespace ConsoleApp1.BusinessLogic
 
             var initialSpeed = holdTime;
             var remainingTime = r.TimeLimit - holdTime;
-            long distance = remainingTime * initialSpeed;
+            long distance = (long)remainingTime * (long)initialSpeed;
+
+            // Overflow
+            if (distance < 0)
+                return long.MaxValue;
 
             return distance;
         }

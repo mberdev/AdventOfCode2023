@@ -26,7 +26,7 @@ namespace ConsoleApp1.InputParse
 
             var strDistances = distances.Split(' ').Skip(1).Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
             var strDistance = string.Join("", strDistances);
-            var distance = int.Parse(strDistance);
+            var distance = long.Parse(strDistance);
 
             return new Record(time, distance);
         }

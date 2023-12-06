@@ -11,7 +11,7 @@ namespace ConsoleApp1.BusinessLogic
 {
     public static class BusinessLogic
     {
-        public static int DoRace(Race r, int holdTime)
+        public static long DoRace(Race r, int holdTime)
         {
             if (holdTime >= r.TimeLimit)
                 return 0;
@@ -21,12 +21,12 @@ namespace ConsoleApp1.BusinessLogic
 
             var initialSpeed = holdTime;
             var remainingTime = r.TimeLimit - holdTime;
-            var distance = remainingTime * initialSpeed;
+            long distance = remainingTime * initialSpeed;
 
             return distance;
         }
 
-        public static bool IsRecordBeaten(int myDistance, int recordDistance)
+        public static bool IsRecordBeaten(long myDistance, long recordDistance)
         {
             return myDistance > recordDistance;
         }

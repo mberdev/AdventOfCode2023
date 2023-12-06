@@ -4,9 +4,9 @@ namespace ConsoleApp1.InputParse
     public class Record
     {
         public int Time { get; }
-        public int Distance { get; }
+        public long Distance { get; }
 
-        public Record(int time, int distance)
+        public Record(int time, long distance)
         {
             Time = time;
             Distance = distance;

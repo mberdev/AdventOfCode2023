@@ -11,24 +11,43 @@ static void Part1(string[] lines)
     var times = lines[0];
     var distances = lines[1];
 
-    var pairs = DataParser.Parse(times, distances);
-    Printer.Print(pairs);
+    var records = DataParser.Parse(times, distances);
+    Printer.Print(records);
 
+    var total = 1;
+    foreach ( var record in records )
+    {
+        var race = new Race(record.Time);
 
-    //Console.WriteLine($"=============================");
+        int successCount = 0;
+        for (int holdTime = 1; holdTime < record.Time;  holdTime++)
+        {
+            
+            var myDistance = BusinessLogic.DoRace(race, holdTime);
+            if (BusinessLogic.IsRecordBeaten(myDistance, record.Distance))
+            {
+                successCount++;
+            }
+        }
 
-    //Console.WriteLine($"");
-    //Console.WriteLine($"");
-    //Console.WriteLine(totalPoints);
-    //Console.WriteLine($"");
-    //Console.WriteLine($"");
+        total *= successCount;
+
+    }
+
+    Console.WriteLine($"=============================");
+
+    Console.WriteLine($"");
+    Console.WriteLine($"");
+    Console.WriteLine(total);
+    Console.WriteLine($"");
+    Console.WriteLine($"");
 }
- 
+
 
 //-------------------------------------------------------------
 
-//var lines = LineBreakParser.ParseInput(Input.File, leaveEmptyLines: false);
-var lines = LineBreakParser.ParseInput(Input.TestSet, leaveEmptyLines: false);
+var lines = LineBreakParser.ParseInput(Input.File, leaveEmptyLines: false);
+//var lines = LineBreakParser.ParseInput(Input.TestSet, leaveEmptyLines: false);
 
 Part1(lines);
 //Part2(lines);

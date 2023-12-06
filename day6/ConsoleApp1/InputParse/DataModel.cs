@@ -1,12 +1,12 @@
 ﻿
 namespace ConsoleApp1.InputParse
 {
-    public class ValuesPair
+    public class Record
     {
         public int Time { get; }
         public int Distance { get; }
 
-        public ValuesPair(int time, int distance)
+        public Record(int time, int distance)
         {
             Time = time;
             Distance = distance;
@@ -16,5 +16,16 @@ namespace ConsoleApp1.InputParse
         {
             return $"{{Time: {Time}, Distance: {Distance}}}";
         }
+    }
+
+    public class Race
+    {
+        public int TimeLimit { get; }
+
+        public Race(int timeLimit)
+        {
+            TimeLimit = timeLimit;
+        }
+
     }
 }

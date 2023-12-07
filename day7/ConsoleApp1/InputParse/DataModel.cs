@@ -1,8 +1,29 @@
 ﻿
 namespace ConsoleApp1.InputParse
 {
+    //Part 1
+    //public enum CardValue
+    //{
+    //    _2 = 2,
+    //    _3 = 3,
+    //    _4 = 4,
+    //    _5 = 5,
+    //    _6 = 6,
+    //    _7 = 7,
+    //    _8 = 8,
+    //    _9 = 9,
+    //    T = 10,
+    //    J = 11,
+    //    Q = 12,
+    //    K = 13,
+    //    A = 14,
+    //}
+
+    //Part 2
     public enum CardValue
     {
+        J = 1,
+
         _2 = 2,
         _3 = 3,
         _4 = 4,
@@ -12,7 +33,7 @@ namespace ConsoleApp1.InputParse
         _8 = 8,
         _9 = 9,
         T = 10,
-        J = 11,
+
         Q = 12,
         K = 13,
         A = 14,
@@ -71,7 +92,7 @@ namespace ConsoleApp1.InputParse
 
         public override string ToString()
         {
-            return $"{string.Join(",", CardValues)} - {Bid} - {BusinessLogic.BusinessLogic.AnalyzeHand(CardValues).Type}";
+            return $"{string.Join(",", CardValues)} - {Bid} - {BusinessLogic.BusinessLogic.AnalyzeHand_Regular(CardValues).Type}";
         }
     }
 }

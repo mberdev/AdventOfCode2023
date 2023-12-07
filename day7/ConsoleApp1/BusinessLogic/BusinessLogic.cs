@@ -97,7 +97,7 @@ namespace ConsoleApp1.BusinessLogic
                 {
                     var rank = index + 1;
 
-                    Console.WriteLine($"{rank} : {string.Join(",", r.CardValues)}  -> {r.Bid * rank}");
+                    //Console.WriteLine($"{rank} : {string.Join(",", r.CardValues)}  -> {r.Bid * rank}");
                     return r.Bid * rank;
                 })
                 .Sum();

@@ -3,19 +3,19 @@ namespace ConsoleApp1.InputParse
 {
     public enum CardValue
     {
-        A = 0,
-        K = 1,
-        Q = 2,
-        J = 3,
-        T = 4,
-        _9 = 5,
-        _8 = 6,
+        _2 = 2,
+        _3 = 3,
+        _4 = 4,
+        _5 = 5,
+        _6 = 6,
         _7 = 7,
-        _6 = 8,
-        _5 = 9,
-        _4 = 10,
-        _3 = 11,
-        _2 = 12,
+        _8 = 8,
+        _9 = 9,
+        T = 10,
+        J = 11,
+        Q = 12,
+        K = 13,
+        A = 14,
     }
 
     public static class CardValuesParser
@@ -34,17 +34,30 @@ namespace ConsoleApp1.InputParse
     }
 
 
-    public enum Hand
+    public enum HandType
     {
-        HighCard = 0,
-        OnePair = 1,
-        TwoPair = 2,
-        ThreeOfAKind = 3,
-        FullHouse = 4,
-        FourOfAKind = 5,
-        FiveOfAKind = 6,
+        HighCard = 1,
+        OnePair = 2,
+        TwoPair = 3,
+        ThreeOfAKind = 4,
+        FullHouse = 5,
+        FourOfAKind = 6,
+        FiveOfAKind = 7,
     }
 
+    public class Hand
+    {
+        public HandType Type { get; }
+        public CardValue Group1Value { get; }
+        public CardValue Group2Value { get; }
+
+        public Hand(HandType type, CardValue group1Value, CardValue group2Value)
+        {
+            Type = type;
+            Group1Value = group1Value;
+            Group2Value = group2Value;
+        }
+    }
     public class Round
     {
         public List<CardValue> CardValues { get; }
@@ -58,7 +71,7 @@ namespace ConsoleApp1.InputParse
 
         public override string ToString()
         {
-            return $"{string.Join(",", CardValues)} - {Bid} - {BusinessLogic.BusinessLogic.FindHand(CardValues)}";
+            return $"{string.Join(",", CardValues)} - {Bid} - {BusinessLogic.BusinessLogic.AnalyzeHand(CardValues).Type}";
         }
     }
 }

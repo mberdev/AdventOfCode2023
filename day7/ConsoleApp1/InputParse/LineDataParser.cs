@@ -12,7 +12,9 @@ namespace ConsoleApp1.InputParse
 
         public static List<Round> Parse(string[] input)
         {
-            return input.Select(row =>
+            //int c = input.Count(); // DEBUG
+
+            var result = input.Select(row =>
             {
                 var split = row.Split(' ').ToList();
                 var cardValues = split[0].Select(x => CardValuesParser.Parse(x)).ToList();
@@ -20,6 +22,10 @@ namespace ConsoleApp1.InputParse
                 return new Round(cardValues, bid);
             })
             .ToList();
+
+            //c = result.Count(); // DEBUG
+
+            return result;
         }
 
     }

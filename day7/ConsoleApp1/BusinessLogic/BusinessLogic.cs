@@ -11,7 +11,7 @@ namespace ConsoleApp1.BusinessLogic
 {
     public static class BusinessLogic
     {
-        public static Dictionary<CardValue, List<CardValue>> GroupCards(List<CardValue> cardValues)
+        public static Dictionary<CardValue, List<CardValue>> GroupCardsDescending(List<CardValue> cardValues)
         {
             return cardValues
                 .GroupBy(x => x)
@@ -19,45 +19,88 @@ namespace ConsoleApp1.BusinessLogic
                 .ToDictionary(g => g.Key, g => g.ToList());
         }
 
-        public static Hand FindHand(List<CardValue> cardValues)
+        public static HandType FindHandType(int biggestGroupCount, int secondBiggestGroupCount)
         {
-            var groups = GroupCards(cardValues);
+            switch (biggestGroupCount)
+            {
+                case 5:
+                    return HandType.FiveOfAKind;
+                case 4:
+                    return HandType.FourOfAKind;
+                case 3:
+                    if (secondBiggestGroupCount == 2)
+                    {
+                        return HandType.FullHouse;
+                    }
+                    else
+                    {
+                        return HandType.ThreeOfAKind;
+                    }
+                case 2:
+                    if (secondBiggestGroupCount == 2)
+                    {
+                        return HandType.TwoPair;
+                    }
+                    else
+                    {
+                        return HandType.OnePair;
+                    }
+                case 1:
+                    return HandType.HighCard;
+                default:
+                    throw new ArgumentException("Invalid number of cards");
+            }
+        }
+
+
+        public static Hand AnalyzeHand(List<CardValue> cardValues)
+        {
+            var groups = GroupCardsDescending(cardValues);
 
             var biggestGroup = groups.First().Value;
             var secondBiggestGroup = groups.Count > 1
                 ? groups.Skip(1).First().Value
                 : null;
 
-            switch (biggestGroup.Count)
-            {
-                case 5:
-                    return Hand.FiveOfAKind;
-                case 4:
-                    return Hand.FourOfAKind;
-                case 3:
-                    if (secondBiggestGroup!.Count == 2)
-                    {
-                        return Hand.FullHouse;
-                    }
-                    else
-                    {
-                        return Hand.ThreeOfAKind;
-                    }
-                case 2:
-                    if (secondBiggestGroup!.Count == 2)
-                    {
-                        return Hand.TwoPair;
-                    }
-                    else
-                    {
-                        return Hand.OnePair;
-                    }
-                case 1:
-                    return Hand.HighCard;
-                default:
-                    throw new ArgumentException("Invalid number of cards");
-            }
+            HandType handType = FindHandType(biggestGroup.Count, secondBiggestGroup?.Count ?? 0);
+     
+            return new Hand(
+                handType, 
+                biggestGroup.First(), 
+                secondBiggestGroup?.First() ?? 0
+            );
+        }
 
+
+        public static List<Round> SortByStrength(List<Round> rounds)
+        {
+            var sortedRounds = rounds
+                .Select(r => (Round: r, Hand: AnalyzeHand(r.CardValues)))
+                .OrderBy(x => x.Hand.Type)
+                //.ThenBy(x => x.Hand.Group1Value)
+                .ThenBy(x => x.Round.CardValues[0])
+                .ThenBy(x => x.Round.CardValues[1])
+                .ThenBy(x => x.Round.CardValues[2])
+                .ThenBy(x => x.Round.CardValues[3])
+                .ThenBy(x => x.Round.CardValues[4])
+                //.ThenBy(x => x.Hand.Group2Value)
+                .Select(x => x.Round)
+                .ToList();
+
+            return sortedRounds;
+        }
+
+        public static int CalculateWins(List<Round> sortedRounds)
+        { 
+            return sortedRounds
+                .Select((r, index) =>
+                {
+                    var rank = index + 1;
+
+                    Console.WriteLine($"{rank} : {string.Join(",", r.CardValues)}  -> {r.Bid * rank}");
+                    return r.Bid * rank;
+                })
+                .Sum();
         }
     }
 }

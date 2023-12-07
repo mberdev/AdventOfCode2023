@@ -9,17 +9,29 @@ using System.Linq;
 static void Part1(string[] lines)
 {
     var rounds = DataParser.Parse(lines);
-    Printer.Print(rounds);
 
 
+    //Printer.Print(rounds);
 
-    //Console.WriteLine($"=============================");
+    var sortedRounds = BusinessLogic.SortByStrength(rounds);
+
+    //Console.WriteLine($"===========SORTED===========");
 
     //Console.WriteLine($"");
     //Console.WriteLine($"");
-    //Console.WriteLine(total);
-    //Console.WriteLine($"");
-    //Console.WriteLine($"");
+    //Printer.Print(sortedRounds);
+
+
+    var wins = BusinessLogic.CalculateWins(sortedRounds);
+
+
+    Console.WriteLine($"=============================");
+
+    Console.WriteLine($"");
+    Console.WriteLine($"");
+    Console.WriteLine(wins);
+    Console.WriteLine($"");
+    Console.WriteLine($"");
 }
 
 
@@ -30,7 +42,7 @@ static void Part1(string[] lines)
 //-------------------------------------------------------------
 
 var lines = LineBreakParser.ParseInput(Input.File, keepEmptyLines: false);
-//var lines = LineBreakParser.ParseInput(Input.TestSet, leaveEmptyLines: false);
+//var lines = LineBreakParser.ParseInput(Input.TestSet, keepEmptyLines: false);
 
 Part1(lines);
 //Part2(lines);

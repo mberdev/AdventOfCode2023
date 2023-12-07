@@ -14,11 +14,11 @@ namespace ConsoleApp1.InputParse
             return lines.Select(l => l.Trim()).ToArray();
         }
 
-        public static string[] ParseInput(string input, bool leaveEmptyLines)
+        public static string[] ParseInput(string input, bool keepEmptyLines)
         {
             var lines = ParseLines(input);
             
-            if (!leaveEmptyLines)
+            if (!keepEmptyLines)
             {
                 lines = lines.Where(l => !string.IsNullOrEmpty(l)).ToArray();
             }

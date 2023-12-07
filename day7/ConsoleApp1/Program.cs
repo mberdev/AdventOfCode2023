@@ -8,8 +8,8 @@ using System.Linq;
 
 static void Part1(string[] lines)
 {
-    //var records = DataParser.Parse_Part1(times, distances);
-    //Printer.Print(records);
+    var rounds = DataParser.Parse(lines);
+    Printer.Print(rounds);
 
 
 

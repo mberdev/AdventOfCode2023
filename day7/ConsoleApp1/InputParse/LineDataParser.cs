@@ -10,9 +10,16 @@ namespace ConsoleApp1.InputParse
     public class DataParser
     {
 
-        public static List<object> Parse(string[] input)
+        public static List<Round> Parse(string[] input)
         {
-            return Enumerable.Empty<object>().ToList();
+            return input.Select(row =>
+            {
+                var split = row.Split(' ').ToList();
+                var cardValues = split[0].Select(x => CardValuesParser.Parse(x)).ToList();
+                var bid = int.Parse(split[1]);
+                return new Round(cardValues, bid);
+            })
+            .ToList();
         }
 
     }
